@@ -1,11 +1,12 @@
 %global forgeurl https://github.com/roc-lang/roc
-%global commit c74685f74aa4aee259b3b30f2792d25981a48dee
+%global version0 0.0.1
+%global commit c75f3ccd6c6b42005e5fc1fff3363ba91410e138
 %forgemeta
 
 %bcond release 1
 
 Name:           roc
-Version:        0.0.1
+Version:        %{forgeversion}
 Release:        0.1%{?dist}
 Summary:        A fast, friendly, functional language
 
