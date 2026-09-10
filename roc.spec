@@ -1,6 +1,8 @@
+%global debug_package %{nil}
+
 %global forgeurl https://github.com/roc-lang/roc
 %global version0 0.0.1
-%global commit c75f3ccd6c6b42005e5fc1fff3363ba91410e138
+%global commit cd0ecc57bdc3ee1ca89235b4dfcd4e7d4a523116
 %forgemeta
 
 %bcond release 1
@@ -14,17 +16,13 @@ License:        UPL-1.0
 URL:            https://www.roc-lang.org
 Source0:        %{forgesource}
 
-BuildRequires:  cargo
-BuildRequires:  gcc-c++
-BuildRequires:  libffi-devel
-#BuildRequires:  lld16
-BuildRequires:  llvm16-devel
-BuildRequires:  rust
-BuildRequires:  zig > 0.11
-#BuildRequires:  zig-srpm-macros
+#BuildRequires:  gcc-c++
+#BuildRequires:  libffi-devel
+BuildRequires:  zig > 0.16
+BuildRequires:  zig-srpm-macros
 BuildRequires:  zlib-devel
-#ExclusiveArch:  %%{zig_arches}
-ExclusiveArch:  x86_64 aarch64
+ExclusiveArch:  %{zig_arches}
+#ExclusiveArch:  x86_64 aarch64
 
 %description
 A general functional programming inspired from Elm
@@ -35,20 +33,23 @@ A general functional programming inspired from Elm
 
 
 %build
-env LLVM_SYS_160_PREFIX=%{_libdir}/llvm16 cargo build %{?with_release:--release}
+zig build roc
 
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-cp -p target/%{?with_release:release}%{!?with_release:debug}/{roc,roc-docs,roc_language_server,roc_wasm_interp} %{buildroot}%{_bindir}
+cp -p zig-out/bin/roc %{buildroot}%{_bindir}
 
 
 %files
-%license LICENSE
-%doc examples
+%license LICENSE legal_details
+%doc README.md examples
 %{_bindir}/roc*
 
 
 %changelog
+* Thu Sep 10 2026 Jens Petersen <petersen@redhat.com> - 0.0.1^20260910gitcd0ecc5-0.1
+- update to latest snapshot: now uses zig
+
 * Tue Apr 16 2024 Jens Petersen <petersen@redhat.com> - 0.0.1-1
 - initial package
